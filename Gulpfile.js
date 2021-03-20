@@ -1,38 +1,38 @@
 // @ts-check
-const path = require("path");
-const fs = require("fs");
-const log = require("fancy-log");
-const newer = require("gulp-newer");
-const sourcemaps = require("gulp-sourcemaps");
-const del = require("del");
-const rename = require("gulp-rename");
-const concat = require("gulp-concat");
-const merge2 = require("merge2");
-const mkdirp = require("mkdirp");
-const { src, dest, task, parallel, series, watch } = require("gulp");
-const { append, transform } = require("gulp-insert");
-const { prependFile } = require("./scripts/build/prepend");
-const { exec, readJson, needsUpdate, getDiffTool, getDirSize, rm } = require("./scripts/build/utils");
-const { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
-const { buildProject, cleanProject, watchProject } = require("./scripts/build/projects");
-const cmdLineOptions = require("./scripts/build/options");
+let path = require("path");
+let fs = require("fs");
+let log = require("fancy-log");
+let newer = require("gulp-newer");
+let sourcemaps = require("gulp-sourcemaps");
+let del = require("del");
+let rename = require("gulp-rename");
+let concat = require("gulp-concat");
+let merge2 = require("merge2");
+let mkdirp = require("mkdirp");
+let { src, dest, task, parallel, series, watch } = require("gulp");
+let { append, transform } = require("gulp-insert");
+let { prependFile } = require("./scripts/build/prepend");
+let { exec, readJson, needsUpdate, getDiffTool, getDirSize, rm } = require("./scripts/build/utils");
+let { runConsoleTests, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
+let { buildProject, cleanProject, watchProject } = require("./scripts/build/projects");
+let cmdLineOptions = require("./scripts/build/options");
 
-const copyright = "CopyrightNotice.txt";
-const cleanTasks = [];
+let copyright = "CopyrightNotice.txt";
+let cleanTasks = [];
 
-const buildScripts = () => buildProject("scripts");
+let buildScripts = () => buildProject("scripts");
 task("scripts", buildScripts);
 task("scripts").description = "Builds files in the 'scripts' folder.";
 
-const cleanScripts = () => cleanProject("scripts");
+let cleanScripts = () => cleanProject("scripts");
 cleanTasks.push(cleanScripts);
 
-const libraries = readJson("./src/lib/libs.json");
-const libs = libraries.libs.map(lib => {
-    const relativeSources = ["header.d.ts"].concat(libraries.sources && libraries.sources[lib] || [lib + ".d.ts"]);
-    const relativeTarget = libraries.paths && libraries.paths[lib] || ("lib." + lib + ".d.ts");
-    const sources = relativeSources.map(s => path.posix.join("src/lib", s));
-    const target = `built/local/${relativeTarget}`;
+let libraries = readJson("./src/lib/libs.json");
+let libs = libraries.libs.map(lib => {
+    let relativeSources = ["header.d.ts"].concat(libraries.sources && libraries.sources[lib] || [lib + ".d.ts"]);
+    let relativeTarget = libraries.paths && libraries.paths[lib] || ("lib." + lib + ".d.ts");
+    let sources = relativeSources.map(s => path.posix.join("src/lib", s));
+    let target = `built/local/${relativeTarget}`;
     return { target, relativeTarget, sources };
 });
 
